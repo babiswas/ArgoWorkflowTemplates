@@ -1,0 +1,28 @@
+Type of templates:
+==================
+1.Container type template.
+
+
+- name: hello-world
+    container:
+      image: busybox
+      command: [echo]
+      args: ["hello world"]
+
+
+2.DAG type template
+
+- name: diamond
+    dag:
+      tasks:
+      - name: A
+        template: echo
+      - name: B
+        dependencies: [A]
+        template: echo
+      - name: C
+        dependencies: [A]
+        template: echo
+      - name: D
+        dependencies: [B, C]
+        template: echo
