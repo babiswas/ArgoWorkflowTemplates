@@ -1,1 +1,5 @@
 argo submit arguments-parameters.yaml -p message="goodbye world"
+
+using parameter file
+====================
+argo submit arguments-parameters.yaml --parameter-file params.yaml
