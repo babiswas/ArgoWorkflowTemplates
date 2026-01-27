@@ -26,3 +26,33 @@ Type of templates:
       - name: D
         dependencies: [B, C]
         template: echo
+
+3.HTTP template
+================
+
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: http-template-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: get-google-homepage
+            template: http
+            arguments:
+              parameters: [{name: url, value: "https://www.google.com"}]
+    - name: http
+      inputs:
+        parameters:
+          - name: url
+      http:
+        timeoutSeconds: 20 # Default 30
+        url: "{{inputs.parameters.url}}"
+        method: "GET" # Default GET
+        headers:
+          - name: "x-header-name"
+            value: "test-value"
+        successCondition: "response.body contains \"google\"" # available since v3.3
+        body: "test body" # Change request body
