@@ -28,7 +28,6 @@ Type of templates:
         template: echo
 
 3.HTTP template
-================
 
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
@@ -51,6 +50,17 @@ spec:
         timeoutSeconds: 20 # Default 30
         url: "{{inputs.parameters.url}}"
         method: "GET" # Default GET
+
+4.Steps Template
+
+- name: hello-hello-hello
+    steps:
+    - - name: step1
+        template: prepare-data
+    - - name: step2a
+        template: run-data-first-half
+      - name: step2b
+        template: run-data-second-half
         headers:
           - name: "x-header-name"
             value: "test-value"
