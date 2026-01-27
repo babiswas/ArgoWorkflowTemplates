@@ -1,0 +1,1 @@
+argo submit arguments-parameters.yaml -p message="goodbye world"
