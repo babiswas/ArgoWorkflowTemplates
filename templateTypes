@@ -74,4 +74,10 @@ spec:
       slack:
         text: "{{workflow.name}} finished!"
 
+6.Suspend Template
+
+ - name: delay
+    suspend:
+      duration: "20s"
+
 
