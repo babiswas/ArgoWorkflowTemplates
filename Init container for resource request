@@ -1,0 +1,20 @@
+# <... snipped ...>
+  - name: large-artifact
+    # below patch gets merged with the actual pod spec and increases the memory
+    # request of the init container.
+    podSpecPatch: |
+      initContainers:
+        - name: init
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 300m
+    inputs:
+      artifacts:
+      - name: data
+        path: /tmp/large-file
+    container:
+      image: alpine:3.23
+      command: [sh, -c]
+      args: ["cat /tmp/large-file"]
+# <... snipped ...>
