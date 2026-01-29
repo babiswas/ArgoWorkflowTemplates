@@ -1,0 +1,34 @@
+Artifact garbage Collection
+============================
+
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: artifact-gc-
+spec:
+  entrypoint: main
+  artifactGC:
+    strategy: OnWorkflowDeletion  # default Strategy set here applies to all Artifacts by default
+  templates:
+    - name: main
+      container:
+        image: argoproj/argosay:v2
+        command:
+          - sh
+          - -c
+        args:
+          - |
+            echo "can throw this away" > /tmp/temporary-artifact.txt
+            echo "keep this" > /tmp/keep-this.txt
+      outputs:
+        artifacts:
+          - name: temporary-artifact
+            path: /tmp/temporary-artifact.txt
+            s3:
+              key: temporary-artifact.txt
+          - name: keep-this
+            path: /tmp/keep-this.txt
+            s3:
+              key: keep-this.txt
+            artifactGC:
+              strategy: Never   # optional override for an Artifact
