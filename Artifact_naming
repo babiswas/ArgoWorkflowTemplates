@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: artifact-gc-dir-key-
+spec:
+  entrypoint: main
+  artifactGC:
+    strategy: OnWorkflowDeletion  # default Strategy set here applies to all Artifacts by default
+  templates:
+    - name: main
+      container:
+        image: argoproj/argosay:v2
+        command:
+          - sh
+          - -c
+        args:
+          - |
+            mkdir /tmp/tmp-directory
+            echo "can throw this away" > /tmp/tmp-directory/delete-this.txt
+            echo "and this too" > /tmp/tmp-directory/delete-this-too.txt
+      outputs:
+        artifacts:
+          - name: temporary-artifact
+            path: /tmp/tmp-directory
+            archive:
+              # Avoid having tgz file.
+              none: {}
+            s3:
+              key: "{{workflow.name}}/directory/" # IMPORTANT! ends with "/"
